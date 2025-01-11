@@ -38,8 +38,8 @@ const refreshOIDCTokenIfNeeded = (config) => {
       );
       logger.debug("%s access_token is valid", config.name);
     } catch (error) {
-      if (error.code == "ERR_JWT_EXPIRED") {
-        logger.warn("%s access_token expired, refreshing", config.name);
+      if (error.code == "ERR_JWT_EXPIRED" || error.code == "ERR_JWS_INVALID") {
+        logger.warn("%s access_token expired or invalid, refreshing", config.name);
         logger.warn("Catched info:", error);
         req.appSession[config.session_storage_key] = await fetchOIDCToken(
           req.appSession.access_token,
